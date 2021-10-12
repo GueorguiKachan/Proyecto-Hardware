@@ -1,0 +1,17 @@
+Función                                 Calls   Time       Instrucciones Tamaño (Bytes)
+candidatos_actualizar_arm                 1      1.384ms        94          376 
+candidatos_propagar_arm                   30     1.202ms        53          212
+candidatos_actualizar_arm_c               1      239.667us      43          172
+candidatos_actualizar_c -O0               1      234.000us      47          188
+candidatos_actualizar_c -O1               1      219.833us      42          168
+candidatos_actualizar_c -O2               1      200.499us      33          132
+candidatos_actualizar_c -O3 y -Otime      1      875.583us
+candidatos_propagar_c -O0                 60     2.645ms        62          248
+candidatos_propagar_c -O1                 60     2.050ms        53          212
+candidatos_propagar_c -O2                 60     2.185ms        49          196
+candidatos_propagar_c -O3 y -Otime        30     750us          79          316
+candidatos_actualizar_c_arm -O0           1      234 us         47          188
+candidatos_actualizar_c_arm -O1           1      219.833us      42          168
+candidatos_actualizar_c_arm -O2           1      146.166us      34          136
+candidatos_actualizar_c_arm -O3 y -Otime  1      171.999        42          168
+
