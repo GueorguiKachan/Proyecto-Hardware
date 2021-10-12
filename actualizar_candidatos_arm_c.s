@@ -1,4 +1,4 @@
-		AREA datos,DATA
+AREA datos,DATA
 num_filas EQU 9
 num_columnas EQU 9
 mascara_valor EQU 0x0000000F
@@ -19,7 +19,7 @@ candidatos_actualizar_arm_c
 					;r8-> valor de la celda pero se puede modificar
 					;r3,r8,r9,r10,r11,r4,r5,r6
 	STMDB R13!,{R4-R8,lr} 			;Se guardan los valores de los registros r4 a r8 y el link register 
-	MOV R6,R0 						;En r6 se guarda la direcciÛn inicial de la cuadrÌcula?
+	MOV R6,R0 						;En r6 se guarda la direcci√≥n inicial de la cuadr√≠cula?
 	MOV R7,#0 						;CELDAS_VACIAS=0
 	MOV R4,#0 						;i=0
 
@@ -35,7 +35,7 @@ nueva_iter_j
 	
 	ADD R2,R6,R4,LSL #salto_fila 		
 	ADD R2,R2,R5,LSL #salto_columna
-	;LDRH R0,[R2] 							;r2 = valor de la direcciÛn de la celda que toca. Carga half-word.	
+	;LDRH R0,[R2] 							;r2 = valor de la direcci√≥n de la celda que toca. Carga half-word.	
 	ldr r0,[r2]								; r0 = 2 celdas
 	MOV r8,r0,LSR #16
 	AND r0,r0,#0x000003F 	;Hace and del valor con F y lo guarda en r2.
@@ -79,14 +79,17 @@ nueva_iter_j2						;r0=valor_celda r1=@celda
 	
 	MOV r2,r5 							;Se prepara para llamar a la funcion candidatos_propagar
 	MOV r1,r4
-	MOV r0,r6 							;Primer par·metro de la funciÛn es la @ inicial de la cuadrÌcula
-	BL candidatos_propagar_c 			;r14 ser· la direcciÛn de retorno
+	MOV r0,r6 							;Primer par√°metro de la funci√≥n es la @ inicial de la cuadr√≠cula
+	BL candidatos_propagar_c 			;r14 ser√° la direcci√≥n de retorno
 	
 ;-----Nuevo----------		
 	add r5,r5,#1
 	and r5,r5,#0x000000FF
 compr_segundo_num
 
+	CMP r5,#9
+	addeq r4,r4,#1
+	BEQ ini_bucle2
 	CMP r8,#0
 	ADDEQ r7,r7,#1 					;Si es igual a 0 no se propaga nada y se suma uno
 	ADDEQ r5,r5,#1
@@ -94,8 +97,8 @@ compr_segundo_num
 	
 	MOV r2,r5 							;Se prepara para llamar a la funcion candidatos_propagar
 	MOV r1,r4
-	MOV r0,r6 							;Primer par·metro de la funciÛn es la @ inicial de la cuadrÌcula
-	BL candidatos_propagar_c 			;r14 ser· la direcciÛn de retorno
+	MOV r0,r6 							;Primer par√°metro de la funci√≥n es la @ inicial de la cuadr√≠cula
+	BL candidatos_propagar_c 			;r14 ser√° la direcci√≥n de retorno
 ;-----Nuevo---------
 	
 	add R5,R5,#1
