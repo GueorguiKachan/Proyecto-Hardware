@@ -25,7 +25,7 @@ candidatos_actualizar_arm
 					;r3,r8,r9,r10,r11,r4,r5,r6
 					
 	STMDB R13!,{R4-R10,lr} 			;Se guardan los valores de los registros r4 a r8 y el link register 
-	MOV R6,R0 						;En r6 se guarda la dirección inicial de la cuadrícula?
+	MOV R6,R0 						;En r6 se guarda la direcciÃ³n inicial de la cuadrÃ­cula?
 	MOV R7,#0 						;CELDAS_VACIAS=0
 	MOV R4,#0 						;i=0
 
@@ -43,7 +43,7 @@ nueva_iter_j
 	
 	ADD R2,R6,R4,LSL #salto_fila 		
 	ADD R2,R2,R5,LSL #salto_columna
-	;LDRH R0,[R2] 					;r2 = valor de la dirección de la celda que toca. Carga half-word.	
+	;LDRH R0,[R2] 					;r2 = valor de la direcciÃ³n de la celda que toca. Carga half-word.	
 	LDR R0,[R2]
 	
 	MOV r8,r0,LSR #16
@@ -91,7 +91,7 @@ nueva_iter_j2						;r0=valor_celda r1=@celda
 	;BEQ nueva_iter_j2
 	BEQ compr_seg_num
 	
-	MOV r0,r6 						;Primer parámetro de la función es la @ inicial de la cuadrícula
+	MOV r0,r6 						;Primer parÃ¡metro de la funciÃ³n es la @ inicial de la cuadrÃ­cula
 	MOV r2,r5 						;Se prepara para llamar a la funcion candidatos_propagar
 	MOV r5,r1						;Esto antes no estaba
 	MOV r1,r4					
@@ -168,6 +168,10 @@ end_columna
 	
 compr_seg_num
 	
+	cmp r5,#9
+	addeq r4,r4,#1
+	beq ini_bucle2
+	
 	CMP r8,#0
 	ADDEQ r7,r7,#1 					;Si es igual a 0 no se propaga nada y se suma uno
 	ADDEQ r5,r5,#1
@@ -175,7 +179,7 @@ compr_seg_num
 ;----Nuevo------------
 	add r10,r10,#1
 	
-	MOV r0,r6 						;Primer parámetro de la función es la @ inicial de la cuadrícula
+	MOV r0,r6 						;Primer parÃ¡metro de la funciÃ³n es la @ inicial de la cuadrÃ­cula
 	MOV r2,r5 						;Se prepara para llamar a la funcion candidatos_propagar
 	MOV r5,r8						;Esto antes no estaba
 	MOV r1,r4
