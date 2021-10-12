@@ -20,8 +20,7 @@ lado_cuadrado	EQU	3
 	EXPORT candidatos_propagar_arm
 
 candidatos_propagar_arm 
-						;-r1=end_i
-						;-r2=end_j
+						;-r2=end_i
 						;-r3=@init_region
 						;-r4=@cuadricula
 						;-r5=valor_celda_15:0
@@ -30,7 +29,7 @@ candidatos_propagar_arm
 						;-r8=celda_completa
 						;-r9=bit_mascara
 						;-r10=valor_celda2_31:16
-	push{r1-r10,lr}	
+	push{r2-r10,lr}	
 	mov r4,r0 
 	add r4,r4, r2, lsl#salto_columna_half
 	add r4,r4,r1,lsl#salto_fila
@@ -102,11 +101,11 @@ primero_word
 	
 	
 	
-suma_fila	add r6,r6,#1
+sumar_fila	add r6,r6,#1
 	b inicio_bucle
 	
 
-fin	pop{r1-r10}
+fin	pop{r2-r10}
 	pop{pc}
 	
 	END
