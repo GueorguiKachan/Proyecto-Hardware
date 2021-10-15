@@ -90,11 +90,11 @@ nueva_iter_j2	;r0=valor_celda r1=@celda
 	MOV r1,r4					
 	;Empieza propagar
 	
-prop ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+prop 
 	;r6 no hace falta guardarlo, r5(r2 si) no y r4 tampoco (r1 si). r0 no se guarda r3 tampoco ,r7 si (celdas_vacias)
 	; r8 si (segunda celda), r9 y r10 no (no se utilizan antes)
 	push{r1,r2,r7,r8,r10}
-	;push{r1-r10}		;-r2=end_i
+						;-r2=end_i
 						;-r3=@init_region
 						;-r4=@cuadricula
 						;-r5=valor_celda_15:0
@@ -169,8 +169,7 @@ primero_word
 sumar_fila	
 	add r6,r6,#1
 	b inicio_bucle
-fin	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-	;pop{r1-r10}
+fin	
 	pop{r1,r2,r7,r8,r10}
 	
 	MOV r5,r2						
@@ -207,4 +206,5 @@ fin_bucles
 	BX r14
 
 	END
+
 
