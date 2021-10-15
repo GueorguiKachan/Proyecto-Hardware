@@ -3,9 +3,10 @@
 #include <stdio.h>
 #include "cola.h"
 
-
+//evento colaEventos [SIZE]; 
 int items[SIZE];
 int front = -1, rear = -1;
+// int ultimoProcesado = rear;
 
 // Check if the queue is full
 int lleno () {
@@ -26,6 +27,17 @@ void cola_guardar_eventos(uint8_t ID_evento, uint32_t auxData) {
   else {
     if (front == -1) front = 0;
     rear = (rear + 1) % SIZE;
+    
+    /***************************************
+    if(rear == ultimoProcesado){
+        return overflow;
+    }
+    evento nuevo;
+    nuevo.ID_evento = ID_evento;
+    nuevo.auxData = auxData;
+    //colaEventos[rear] = nuevo;
+    */
+    
     items[rear] = element;
     printf("\n Inserted -> %d", element);
   }
@@ -67,4 +79,19 @@ void mostrar() {
     printf("%d ", items[i]);
     printf("\n Rear -> %d \n", rear);
   }
+}
+/************************
+bool hayEventoNuevo(){
+  if(rear != ultimoProcesado){
+      return true; 
+  }
+  else{
+      return false;   
+  }
+}*/
+
+evento leerMasAntiguo(){
+   ultimoProcesado = (ultimoProcesado + 1) % SIZE;
+  
+    return colaEventos[ultimoProcesado);
 }
