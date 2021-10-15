@@ -1,2 +1,0 @@
-Creado para poder crear una nueva carpeta.
-Meter algún fichero aquí y borrar este .txt
