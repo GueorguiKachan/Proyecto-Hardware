@@ -7,6 +7,9 @@ struct evento{
 
 int lleno ();
 int vacio ();
-void cola_guardar_eventos(uint8_t ID_evento, uint32_t auxData)
+void cola_guardar_eventos(uint8_t ID_evento, uint32_t auxData);
 int eliminar();
 void mostrar();
+
+//bool hayEventoNuevo();
+//evento leerMasAntiguo();
