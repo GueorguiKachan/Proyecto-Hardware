@@ -1,15 +1,17 @@
+#include <stdint.h>
+#include <stdbool.h>
 #define SIZE 32
 
-struct evento{
-	uint_8t ID_evento;
+struct elemento{
+	uint8_t ID_evento;
 	uint32_t auxData;
+	uint32_t tiempo;
 };
 
 int lleno ();
 int vacio ();
-void cola_guardar_eventos(uint8_t ID_evento, uint32_t auxData);
-int eliminar();
-void mostrar();
-
-//bool hayEventoNuevo();
-//evento leerMasAntiguo();
+bool cola_guardar_eventos(uint8_t ID_evento, uint32_t auxData);
+struct elemento * eliminar();
+//void mostrar();
+bool hay_eventos();
+uint8_t leerMasAntiguo();
