@@ -3,10 +3,8 @@
 #include <stdio.h>
 #include "cola.h"
 
-//evento colaEventos [SIZE]; 
-int items[SIZE];
+struct elemento *items[SIZE];
 int front = -1, rear = -1;
-// int ultimoProcesado = rear;
 
 // Check if the queue is full
 int lleno () {
@@ -21,36 +19,34 @@ int vacio () {
 }
 
 // Adding an element
-void cola_guardar_eventos(uint8_t ID_evento, uint32_t auxData) {
-  if (lleno())
+bool cola_guardar_eventos(uint8_t ID_evento, uint32_t auxData) {
+	//Nos interesa que no haga overflow
+  if (lleno()){
     printf("\n Queue is full!! \n");
+		return false;
+	}
   else {
     if (front == -1) front = 0;
     rear = (rear + 1) % SIZE;
-    
-    /***************************************
-    if(rear == ultimoProcesado){
-        return overflow;
-    }
-    evento nuevo;
-    nuevo.ID_evento = ID_evento;
-    nuevo.auxData = auxData;
-    //colaEventos[rear] = nuevo;
-    */
-    
-    items[rear] = element;
-    printf("\n Inserted -> %d", element);
+		struct elemento *aux;
+		aux->ID_evento = ID_evento;
+		aux->auxData = auxData;
+		aux->tiempo = 3; //poner marca de tiempo
+    items[rear] = aux;
+    //printf("\n Inserted -> %d", element);
+		return true;
   }
 }
 
 // Removing an element
-int eliminar() {
-  int element;
+struct elemento * eliminar() {
+  
   if (vacio()) {
     printf("\n Queue is empty !! \n");
-    return (-1);
+    return (NULL);
   } else {
-    element = items[front];
+		struct elemento *aux;
+    aux = items[front];
     if (front == rear) {
       front = -1;
       rear = -1;
@@ -60,13 +56,13 @@ int eliminar() {
     else {
       front = (front + 1) % SIZE;
     }
-    printf("\n Deleted element -> %d \n", element);
-    return (element);
+    //printf("\n Deleted element -> %d \n", element);
+    return (aux);
   }
 }
 
 // Display the queue
-void mostrar() {
+/*void mostrar() {
   int i;
   if (vacio())
     printf(" \n Empty Queue\n");
@@ -79,19 +75,14 @@ void mostrar() {
     printf("%d ", items[i]);
     printf("\n Rear -> %d \n", rear);
   }
-}
-/************************
-bool hayEventoNuevo(){
-  if(rear != ultimoProcesado){
-      return true; 
-  }
-  else{
-      return false;   
-  }
 }*/
 
-evento leerMasAntiguo(){
-   ultimoProcesado = (ultimoProcesado + 1) % SIZE;
-  
-    return colaEventos[ultimoProcesado);
+//funcion que compruebe si la cola tiene nuevos eventos(supongo que se refiere a que no está vacia)
+bool hay_eventos(){
+	return !vacio();
+}
+
+//funcion que lee el evento mas antiguo sin procesar ( supongo que todos los van en orden de tiempo, no van desordenados)
+uint8_t leerMasAntiguo(){  
+    return items[front]->ID_evento;
 }
