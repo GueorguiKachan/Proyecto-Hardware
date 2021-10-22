@@ -18,7 +18,7 @@ void temporizador_iniciar(){
     // 0x20 bit 5 enables vectored IRQs. 
 		// 4 is the number of the interrupt assigned. Number 4 is the Timer 0 (see table 40 of the LPC2105 user manual  
   VICVectCntl0 = 0x20 | 5; // Página 48 del manual, tabla 40. Número asignado a Timer1                   
-  VICIntEnable = VICIntEnable | 0x00000010;                  // Enable Ti
+  VICIntEnable = VICIntEnable | 0x00000020;                  // Enable Ti
 }
 void temporizador_empezar(){
    T1TCR = 1; // Iniciar el contador 
