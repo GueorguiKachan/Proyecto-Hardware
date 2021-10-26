@@ -1,24 +1,52 @@
 #include <LPC210X.H>    
 #include "gestorGPIO.h"
+#include <stdint.h>
+#include <math.h>
 
 void GPIO_iniciar(){
-	//Si no se debe configurar botones, se iniciaria asi:
 	PINSEL0 = 0x00000000;
 	PINSEL1 = 0x00000000;
 }
 int GPIO_leer(int bit_inicial,int num_bits){
-	//return IOPIN[bit_inicial+num_bits-1:bit_inicial];
+	int result = 0;
+	uint32_t aux = IOPIN;
+	aux = aux / pow(2,bit_inicial);
+	for (int i = 0; i< num_bits; i++){
+		result = result + aux %2;
+		aux = aux / 2;
+	}
+}
+int GPIO_escribir(int bit_inicial,int num_bits,int valor){
+	uint32_t aux = 0;
+	for (int i = 0; i < num_bits; i++){
+		aux = aux * 2;
+		if (valor % 2 == 1){
+			aux = aux + 1;
+		}
+		valor = valor / 2;
+	}
+	aux = aux * pow(2,bit_inicial);
+	IOPIN = IOPIN | aux;
+}	
+
+void GPIO_marcar_entrada(int bit_inicial,int num_bits){
+	uint32_t aux = 0;
+	uint32_t aux2 = 0xffffffff;
+	for (int i = 0; i < num_bits; i++){
+		aux = aux * 2;
+		aux = aux + 1;
+	}
+	aux = aux * pow(2,bit_inicial);
+	aux = aux ^ aux2;
+	IOPIN = IOPIN & aux;
 }
 
-int GPIO_escribir(int bit_inicial,int num_bits,int valor){
-	//supongo que no se puede escribir directamente en IOPIN, pero si se pudiera seria:
-	//IOPIN[bit_inicial+num_bits-1:bit_inicial] = valor;
-	//return valor realmente escrito, ya que puede haberse puesto un nº bits en el que no cabe el valor
-}
-void GPIO_marcar_entrada(int bit_inicial,int num_bits);
-	//Entrada -> 0
-	//IODIR[bit_inicial+num_bits-1:bit_inicial] = 0;
 void GPIO_marcar_salida(int bit_inicial,int num_bits){
-	//Salida -> 1
-	//IODIR[bit_inicial+num_bits-1:bit_inicial] = 1;
+	uint32_t aux = 0;
+	for (int i = 0; i < num_bits; i++){
+		aux = aux * 2;
+		aux = aux + 1;
+	}
+	aux = aux * pow(2,bit_inicial);
+	IOPIN = IOPIN | aux;
 }
