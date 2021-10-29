@@ -6,6 +6,19 @@
 void GPIO_iniciar(){
 	PINSEL0 = 0xa0000000; //a activa eint1 y eint2
 	PINSEL1 = 0x00000000;
+	extmode=0xe01fc148
+//interrupciones por nivel
+extmode1= 0
+extmode2=0
+
+extpolar = 0xe01fc14c
+
+//low active
+extpolar1=0
+extpolar2=0
+
+VICIntEnable = VICIntEnable | 15;
+VICIntEnable = VICIntEnable | 16;
 }
 int GPIO_leer(int bit_inicial,int num_bits){
 	int i;
