@@ -6,7 +6,7 @@
 
 
 void GPIO_iniciar(){
-	PINSEL0 = 0xa0000000; //a activa eint1 y eint2
+	PINSEL0 = 0x00000000; 
 	PINSEL1 = 0x00000000;
 	
 Gestor_Pulsacion_Init();
