@@ -2,21 +2,15 @@
 #include "gestorGPIO.h"
 #include <stdint.h>
 #include <math.h>
-
+	
 void GPIO_iniciar(){
 	PINSEL0 = 0xa0000000; //a activa eint1 y eint2
 	PINSEL1 = 0x00000000;
-	extmode=0xe01fc148
-//interrupciones por nivel
-extmode1= 0
-extmode2=0
+	
+EXTMODE = EXTMODE | 0xF9; //set bit 1 and bit 2 to 0 -> eint1 is lvl-sensitive and eint2 is lvl-sensitive
+EXTPOLAR = EXTPOLAR | 0xF9;  //set bit 1 and bit 2 to 0 -> eint1 is low-active and eint2 is low-active
 
-extpolar = 0xe01fc14c
-
-//low active
-extpolar1=0
-extpolar2=0
-
+//Activa las solicitud de interrupcion por eint1 (15) y eint2 (16)
 VICIntEnable = VICIntEnable | 15;
 VICIntEnable = VICIntEnable | 16;
 }
