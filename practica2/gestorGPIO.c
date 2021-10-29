@@ -4,7 +4,7 @@
 #include <math.h>
 
 void GPIO_iniciar(){
-	PINSEL0 = 0x00000000;
+	PINSEL0 = 0xa0000000; //a activa eint1 y eint2
 	PINSEL1 = 0x00000000;
 }
 int GPIO_leer(int bit_inicial,int num_bits){
