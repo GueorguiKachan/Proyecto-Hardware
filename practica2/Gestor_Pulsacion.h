@@ -1,5 +1,4 @@
-const int posicion_eint1 = 0x00008000;
-const int posicion_eint2 = 0x00010000;
+
 #define EXTMODE          (*((volatile unsigned long *) 0xE01FC148))
 #define EXTPOLAR          (*((volatile unsigned long *) 0xE01FC14C))
 int button_nueva_pulsacion_1();
