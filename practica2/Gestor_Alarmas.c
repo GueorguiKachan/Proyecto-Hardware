@@ -28,9 +28,9 @@ int[] disparaEventos(int tiempoTranscurrido){
         tiempoEventos[i] -= tiempoTranscurrido;
       
     }
-    
+    // Encolar evento correspondiente
   }
-    return algo;
+    
 }
 
 void nuevoEvento(uint_t32 nuevoEvento){
