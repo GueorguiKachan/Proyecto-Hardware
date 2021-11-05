@@ -79,11 +79,11 @@ void boton1_estado(){
 	int entrada = button_nueva_pulsacion_1();
 	switch(eint1_estado)
 	{
-		case 'N': if (entrada == 1) {eint1_estado = 'P';}
-							else if (entrada == 0) {eint1_estado = 'N';}
+		case 'N': if ((VICRawIntr & posicion_eint1) != posicion_eint1) {eint1_estado = 'N';}
+							else {eint1_estado = 'P';}
 							break;
-		case 'P': if (entrada == 1) {eint1_estado = 'P';}
-							else if (entrada == 0) {eint1_estado = 'N';}
+		case 'P': if ((VICRawIntr & posicion_eint1) != posicion_eint1) {eint1_estado = 'N';}
+							else if (entrada == 0) {eint1_estado = 'P';}
 							break;
 	}
 }
