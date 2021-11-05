@@ -1,6 +1,6 @@
 #include <LPC210X.H>                            // LPC21XX Peripheral Registers
 #include "timers.h"
-#include "gestorAlarmas.h"
+#include "Gestor_Alarmas.h"
 
 struct arraysEventos{
   int eventosProgramados[8]; // Array con la info de los eventos (tipo de evento, si es periódico y los milisegundos de retardo)
