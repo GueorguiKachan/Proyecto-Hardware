@@ -1,1 +1,1 @@
-.
+#define setAlarma=0;
