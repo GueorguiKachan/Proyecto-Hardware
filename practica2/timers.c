@@ -1,5 +1,5 @@
 #include <LPC210X.H>                            // LPC21XX Peripheral Registers
-#include "gestorAlarmas.h"
+#include "timers.h"
 
 static volatile unsigned int timer0_int_count = 0;
 static volatile unsigned int timer1_int_count = 0;
