@@ -9,7 +9,7 @@ struct arraysEventos{
   int numEventosProgramados;
 }
 
-int[] disparaEventos(int tiempoTranscurrido){
+void disparaEventos(int tiempoTranscurrido){
   for(int i = 0;i<8;i++){
     if(estaLibre[i]==0 ){ // Si había una alarma programada en este hueco se mira si devuelve el tiempo
       
