@@ -40,7 +40,7 @@ void eint1_comprobar(){
 
 void eint2_comprobar(){
 	//si el boton no esta pulsado
-	EXTINT = EXTINT | 2;
+	EXTINT = EXTINT | 3;
 	if ((VICRawIntr & posicion_eint2) != posicion_eint2){ 
 		
 		VICVectAddr = 0;
