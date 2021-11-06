@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include "cola.h"
 
-struct elemento *items[SIZE];
+struct elemento items[SIZE];
 int front = -1, rear = -1;
 
 // Check if the queue is full
@@ -28,10 +28,10 @@ bool cola_guardar_eventos(uint8_t ID_evento, uint32_t auxData) {
   else {
     if (front == -1) front = 0;
     rear = (rear + 1) % SIZE;
-		struct elemento *aux;
-		aux->ID_evento = ID_evento;
-		aux->auxData = auxData;
-		aux->tiempo = 3; //poner marca de tiempo
+		struct elemento aux;
+		aux.ID_evento = ID_evento;
+		aux.auxData = auxData;
+		aux.tiempo = 3; //poner marca de tiempo
     items[rear] = aux;
     //printf("\n Inserted -> %d", element);
 		return true;
@@ -39,14 +39,14 @@ bool cola_guardar_eventos(uint8_t ID_evento, uint32_t auxData) {
 }
 
 // Removing an element
-struct elemento * eliminar() {
+bool eliminar(struct elemento item) {
   
   if (vacio()) {
     printf("\n Queue is empty !! \n");
-    return (NULL);
+    return false;
   } else {
-		struct elemento *aux;
-    aux = items[front];
+		struct elemento aux;
+    item = items[front];
     if (front == rear) {
       front = -1;
       rear = -1;
@@ -57,7 +57,7 @@ struct elemento * eliminar() {
       front = (front + 1) % SIZE;
     }
     //printf("\n Deleted element -> %d \n", element);
-    return (aux);
+    return true;
   }
 }
 
@@ -84,5 +84,5 @@ bool hay_eventos(){
 
 //funcion que lee el evento mas antiguo sin procesar ( supongo que todos los van en orden de tiempo, no van desordenados)
 uint8_t leerMasAntiguo(){  
-    return items[front]->ID_evento;
+    return items[front].ID_evento;
 }
