@@ -39,14 +39,12 @@ bool cola_guardar_eventos(uint8_t ID_evento, uint32_t auxData) {
 }
 
 // Removing an element
-bool eliminar(struct elemento item) {
+bool eliminar() {
   
   if (vacio()) {
     printf("\n Queue is empty !! \n");
     return false;
   } else {
-		struct elemento aux;
-    item = items[front];
     if (front == rear) {
       front = -1;
       rear = -1;
@@ -83,6 +81,16 @@ bool hay_eventos(){
 }
 
 //funcion que lee el evento mas antiguo sin procesar ( supongo que todos los van en orden de tiempo, no van desordenados)
-uint8_t leerMasAntiguo(){  
-    return items[front].ID_evento;
+struct elemento leerMasAntiguo(){  
+    return items[front];
+}
+
+uint8_t leerIDMasAntiguo(){
+  return items[front].ID_evento;
+}
+uint32_t leerDatosMasAntiguo(){
+  return items[front].auxData;
+}
+uint32_t leerTiempoMasAntiguo(){
+  return  items[front].tiempo;
 }
