@@ -11,7 +11,10 @@ struct elemento{
 int lleno ();
 int vacio ();
 bool cola_guardar_eventos(uint8_t ID_evento, uint32_t auxData);
-struct elemento * eliminar();
+bool eliminar();
 //void mostrar();
 bool hay_eventos();
-uint8_t leerMasAntiguo();
+struct elemento elementoMasAntiguo();
+uint8_t leerIDMasAntiguo();
+uint32_t leerDatosMasAntiguo();
+uint32_t leerTiempoMasAntiguo();
