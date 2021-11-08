@@ -1,5 +1,6 @@
 #include <LPC210X.H>                            // LPC21XX Peripheral Registers
 #include "timers.h"
+#include "eventos.h"
 
 static volatile unsigned int timer0_int_count = 0;
 static volatile unsigned int timer1_int_count = 0;
@@ -59,7 +60,7 @@ void temporizador_periodico ( int periodo) {
 
 /* Timer Counter 0 Interrupt executes each 10ms @ 60 MHz CPU Clock */
 void timer0_ISR (void) __irq {
-    cola_guardar_eventos(numEvento, auxData);
+    cola_guardar_eventos(tempPeriodico, 0);
     T0IR = 1;                              // Clear interrupt flag
     VICVectAddr = 0;                            // Acknowledge Interrupt
 }
