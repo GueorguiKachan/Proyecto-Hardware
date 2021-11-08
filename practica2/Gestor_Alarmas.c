@@ -23,7 +23,8 @@ void disparaEventos(int tiempoTranscurrido){
         else{ // Si no es periodico se libera espacio
           estaLibre[i] = 1;
         }
-        // Encolar evento correspondiente   
+        int tipoEvento = (EventosProgramados[i] >> 24);
+        cola_guardar_eventos(tipoEvento, 0); 
       }
       else{ // Si no se ha cumplido el tiempo, restar
         tiempoEventos[i] -= tiempoTranscurrido;
@@ -31,25 +32,33 @@ void disparaEventos(int tiempoTranscurrido){
     }
   }
 }
-//!!!!!!!!!!!!!!!!!!!! Faltaría comprobar si ya hay algún evento de ese tipo programado y si lo hay poner el nuevo tiempo
+
 void nuevoEvento(uint_t32 nuevoEvento){
-  //Comprobar el tiempo de la alarma. Si es 0, mirar si existe un evento de este tipo y cancelarlo(numEventos--)
+  
   int tiempoNuevoEvento = nuevoEvento & 0x007FFFF;
-  if(tiempoNuevoEvento == 0){
-    int tipoEvento = (nuevoEvento >> 24)
-    for(int i=0; i<8;i++){
-      if(tipoEvento == (eventosProgramados[i] >> 24)){ // El tipo de evento coincide con el que se ha programado en ese hueco
-        estaLibre[i] = 1; // Cancelar la alarma
-      }
+  int tipoEvento = (nuevoEvento >> 24);
+  int eventoExiste = 0;
+  for(int i=0; i<8; i++){ // Comprueba si el tipo de evento a programar ya existe
+    if(tipoEvento == (eventosProgramados[i] >> 24)){
+      eventoExiste = i;
+    }
+  }
+  if(eventoExiste != 0){ // Si en alguna posición del array existe un evento de este tipo
+    if(tiempoNuevoEvento == 0){ // Cancelar el evento 
+      estaLibre[i] = 1; // Cancelar la alarma
+    }
+    else{ // Reprogramar alarma para el evento
+      tiempoEventos[eventoExiste] = tiempoNuevoEvento;
     }
   }
   else{ // Hay que registrar nuevo evento
+    
     if(numEventos < 8){
       for(int i=0; i<8;i++){ // Mirar donde hay un hueco libre
         if(estaLibre[i] == 1){
           estaLibre[i] = 0;
           eventosProgramados[i] = nuevoEvento;
-          tiempoEventos[i] nuevoEvento & 0x007FFFFF;
+          tiempoEventos[i] = tiempoNuevoEvento;
           break;
         }
       }
