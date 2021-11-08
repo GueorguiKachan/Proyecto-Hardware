@@ -31,7 +31,7 @@ void disparaEventos(int tiempoTranscurrido){
     }
   }
 }
-
+//!!!!!!!!!!!!!!!!!!!! Faltaría comprobar si ya hay algún evento de ese tipo programado y si lo hay poner el nuevo tiempo
 void nuevoEvento(uint_t32 nuevoEvento){
   //Comprobar el tiempo de la alarma. Si es 0, mirar si existe un evento de este tipo y cancelarlo(numEventos--)
   int tiempoNuevoEvento = nuevoEvento & 0x007FFFF;
