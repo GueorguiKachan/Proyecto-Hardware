@@ -1,4 +1,7 @@
 #include "Gestor_pulsacion.h"
+#include "eventos.h"
+#include <stdint.h>
+#include "cola.h"
 #include <LPC210X.H>   
 static volatile int nueva_pulsacion_eint1 =0;
 static volatile int nueva_pulsacion_eint2 =0;
@@ -6,8 +9,6 @@ static volatile unsigned int eint1_count = 0;
 static volatile unsigned int eint2_count = 0;
 const int posicion_eint1 = 0x00008000;
 const int posicion_eint2 = 0x00010000;
-static volatile char eint1_estado = 'N';
-static volatile char eint2_estado = 'N';
 
 
 int button_nueva_pulsacion_1(){
@@ -26,21 +27,49 @@ void button_clear_nueva_pulsacion_2(){
   nueva_pulsacion_eint2 = 0;
 }
 
+void boton1_estado(){
+	EXTINT = EXTINT | 2;
+	if ((VICRawIntr & posicion_eint1) != posicion_eint1) {
+		VICIntEnClear = posicion_eint1;
+		//EXTINT = EXTINT | 2; //limpio la solicitud de interrupcion
+		nueva_pulsacion_eint1 = 1;}
+	else {
+		button_clear_nueva_pulsacion_1();
+		VICIntEnable |= posicion_eint1;
+	}
+}
+
+bool boton2_estado(){
+	EXTINT = EXTINT | 3;
+	if ((VICRawIntr & posicion_eint2) == posicion_eint2) {
+		VICIntEnClear = posicion_eint2;
+		//EXTINT = EXTINT | 3; //limpio la solicitud de interrupcion
+		nueva_pulsacion_eint2 = 1;
+		return true;}//true si esta pulsado
+	else {
+		button_clear_nueva_pulsacion_2();
+		VICIntEnable |= posicion_eint2;
+		return false;//false si no esta pulsado
+	}
+}
+
 void eint1_comprobar(){
 	//si el boton no esta pulsado
-	EXTINT = EXTINT | 2;
-	if ((VICRawIntr & posicion_eint1) != posicion_eint1){ 
+	if (boton2_estado()){eint2_comprobar();}
+	/*EXTINT = EXTINT | 2;
+	if ((VICRawIntr & posicion_eint1) == posicion_eint1){ 
 		VICVectAddr = 0;
 		button_clear_nueva_pulsacion_1();
 		VICIntEnable = VICIntEnable | posicion_eint1;
 	}else{
-	eint1_comprobar();}
+	eint1_comprobar();}*/
 	//sino volver a pedir una alarma de 100ms
 }
 
 void eint2_comprobar(){
 	//si el boton no esta pulsado
-	EXTINT = EXTINT | 3;
+	if (boton2_estado()){eint2_comprobar();}
+	/*EXTINT = EXTINT | 3;
 	if ((VICRawIntr & posicion_eint2) != posicion_eint2){ 
 		
 		VICVectAddr = 0;
@@ -49,44 +78,52 @@ void eint2_comprobar(){
 	}
 	else{
 		eint2_comprobar();}
-	//sino volver a pedir una alarma de 100ms
+	//sino volver a pedir una alarma de 100ms*/
 }
 
 void eint1_ISR (void) __irq {
 	eint1_count++;
-	VICIntEnClear = posicion_eint1;//se desactivan las solicitudes de eint1
-	VICVectAddr = 0; 
+	boton1_estado();
+	/*VICIntEnClear = posicion_eint1;//se desactivan las solicitudes de eint1
+	
 	EXTINT = EXTINT | 2; //limpio la solicitud de interrupcion
-	nueva_pulsacion_eint1 = 1;
+	nueva_pulsacion_eint1 = 1;*/
+	
+	
+	/*uint8_t evento = 0;
+	uint8_t aux = 1;
+	aux = aux << 24;
+	aux = aux | 100;*/
+	//cola_guardar_evento(evento, aux);
 	eint1_comprobar();
+	VICVectAddr = 0; 
 	//envio una evento de alarma de 100ms q para q ejecute eint2_comprobar()
 }
 
 void eint2_ISR (void) __irq {
-	eint2_count++;
-	VICIntEnClear = posicion_eint2; //se desactivan las solicitudes de eint1
-	VICVectAddr = 0; 
-	EXTINT = EXTINT | 3; //limpio la solicitud de interrupcion
-	nueva_pulsacion_eint2 = 1;	
-	//envio una evento de alarma de 100ms q para q ejecute eint1_comprobar()
+	eint1_count++;
+	boton2_estado();
+	//VICIntEnClear = posicion_eint1;//se desactivan las solicitudes de eint1
+	
+	//EXTINT = EXTINT | 3; //limpio la solicitud de interrupcion
+	//nueva_pulsacion_eint1 = 1;
+	
+	
+/*	uint8_t evento = alarmaSet;
+	uint8_t aux = pulsacion2;
+	aux = aux << 24;
+	aux = aux | 100;*/
+	//cola_guardar_evento(evento, aux);
 	eint2_comprobar();
+	VICVectAddr = 0; 
+	
+	//envio una evento de alarma de 100ms q para q ejecute eint2_comprobar()
 }
 
 
 
 
-void boton1_estado(){
-	int entrada = button_nueva_pulsacion_1();
-	switch(eint1_estado)
-	{
-		case 'N': if ((VICRawIntr & posicion_eint1) != posicion_eint1) {eint1_estado = 'N';}
-							else {eint1_estado = 'P';}
-							break;
-		case 'P': if ((VICRawIntr & posicion_eint1) != posicion_eint1) {eint1_estado = 'N';}
-							else if (entrada == 0) {eint1_estado = 'P';}
-							break;
-	}
-}
+
 
 void Gestor_Pulsacion_Init(){
 	button_clear_nueva_pulsacion_1();
