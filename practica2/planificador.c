@@ -1,4 +1,3 @@
-#include "planificador.h"
 #include "cola.h"
 #include "eventos.h"
 #include "Gestor_Energia.h"
