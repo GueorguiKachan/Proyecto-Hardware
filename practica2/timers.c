@@ -13,8 +13,8 @@ void temporizador_iniciar(void){
   VPBDIV = 0x1;// --> Esto creo que hace que el PCLK sea el mismo que el CCLK, así el reloj del contador va más rápido. Sección 3.12 del manual LPC
  // T1CTCR = 0x0; // Selecciona modo contador, que cuenta al llegar un flanco ascendente del PCLK
   T1TCR = 0x01; // Bit 0: 1, Bit 1: 0, hace reset del contador y el PCLK. No activa el contador
-  T1PR = 0x0; // Cuando el Prescale Counter Register incremente en 1, el Time Counter también lo hará
-  T1MR0 = 149999; // Con esto creo que salta una interrupción cuando el TC sea igual a 1, que ocurrirá cada micro 
+  T1PR = 0xFFFFFFFE; // Cuando el Prescale Counter Register incremente en 1, el Time Counter también lo hará
+  T1MR0 = 0xFFFFFFFE; // Con esto creo que salta una interrupción cuando el TC sea igual a 1, que ocurrirá cada micro 
   T1MCR = 3;
 	
   VICVectAddr0 = (unsigned long)timer1_ISR;          // set interrupt vector in 0
@@ -34,7 +34,7 @@ void timer1_ISR (void) __irq {
 }
 
 unsigned int temporizador_leer(){
-	return timer1_int_count;
+	return ((T1TC*T1PR)+T1PC)*16;
 }
 
 unsigned int temporizador_parar(void){
