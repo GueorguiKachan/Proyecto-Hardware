@@ -23,24 +23,26 @@
 
 int main (void) {
 	int evento;
+	struct elemento aux;
   // Programar alarma periódica para encolar un evento de tipo tempPeriodico
   limpiarEspacio();
-	temporizador_periodico(59); // 59+1/60MHz creo que son 1us !!!!!!!!!!!!!! Igual habría que hacer una función en gestor Alarmas para programar esto
+	temporizador_periodico(599); // 59+1/60MHz creo que son 1us !!!!!!!!!!!!!! Igual habría que hacer una función en gestor Alarmas para programar esto
   evento = 0x011003E8;
 	cola_guardar_eventos(alarmaSet,evento);
 	while(1){
 		
     if(hay_eventos()){ // Comprueba si en la cola hay eventos nuevos. Si los hay --> switch-case
-			evento = leerIDMasAntiguo();
-			if(evento == alarmaSet){
-				evento = leerDatosMasAntiguo();
+			aux = elementoMasAntiguo();
+			eliminar();
+			if(aux.ID_evento == alarmaSet){
+				evento = aux.auxData;
 				 nuevoEvento(evento);
 			}
-			else if(evento == pulsacion1){}
-			else if(evento == pulsacion2){}
-			else if(evento == tempPeriodico){
+			else if(aux.ID_evento == pulsacion1){}
+			else if(aux.ID_evento == pulsacion2){}
+			else if(aux.ID_evento == tempPeriodico){
 				disparaEventos(1000); // El temporizador interrumpe cada 1us = 1000ms (en el Gestor los tiempos de alarma se guardan en ms)
-				break;
+				
 			}
 			else{}
       /*switch(evento)
@@ -66,7 +68,7 @@ int main (void) {
       }*/
 		}
       else{
-        //PM_idle(); // Poner el procesador en modo reposo hasta que llegue la interrupción del temporizador
+        PM_idle(); // Poner el procesador en modo reposo hasta que llegue la interrupción del temporizador
       }
     }
 	}

@@ -17,12 +17,13 @@ void limpiarEspacio(){
 void disparaEventos(int tiempoTranscurrido){
   int i;
 	int tipoEvento;
+	int esPeriodico;
 	for(i=0; i<8; i++){
     if(misEventos.estaLibre[i] == 0){ // Si había una alarma programada en este hueco se mira si ha llegado al tiempo programado
       
       if(((misEventos.tiempoEventos[i]-tiempoTranscurrido) <= 0) ){ // Si es menor que 0 generar evento
         
-        int esPeriodico= (misEventos.eventosProgramados[i] >> 23) & 0x1;
+         esPeriodico= (misEventos.eventosProgramados[i] >> 23) & 0x1;
         if(esPeriodico == 1){ // Si es periodico se vuelve a programar la alarma
           misEventos.tiempoEventos[i] = misEventos.eventosProgramados[i] & 0x007FFFF;
         }
