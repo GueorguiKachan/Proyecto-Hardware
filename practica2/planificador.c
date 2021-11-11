@@ -11,25 +11,14 @@
 #include "Gestor_Pulsacion.h"
 #include "gestorGPIO.h"
 
-//#pragma import(__use_no_semihosting_swi)
-
-// Nota: wait es una espera activa. Se puede eliminar poniendo el procesador en modo iddle. Probad a hacerlo
-/*void wait (void)  {                         //wait function 
-  unsigned int i;
-  i = temporizador_leer(); // reads the number of previous timer IRQs
-	//temporizador_parar();
-  //while ((i + 50) != temporizador_leer());              //waits for 10 interrupts, i.e. 50ms 
-	while (500 != temporizador_leer());
-}*/
-
 int main (void) {
 	int evento;
 	struct elemento aux;
   // Programar alarma periódica para encolar un evento de tipo tempPeriodico
   limpiarEspacio();
 	GPIO_iniciar();
-	temporizador_periodico(599); // 59+1/60MHz creo que son 1us !!!!!!!!!!!!!! Igual habría que hacer una función en gestor Alarmas para programar esto
-  //evento = 0x011003E8;
+	temporizador_periodico(14999); // 14999 = 1ms
+  //evento = 0x018003E8;
 	//cola_guardar_eventos(alarmaSet,evento);
 	while(1){
 		
@@ -45,7 +34,7 @@ int main (void) {
 			else if(aux.ID_evento == pulsacion2){
 				eint2_comprobar();}
 			else if(aux.ID_evento == tempPeriodico){
-				disparaEventos(1000); // El temporizador interrumpe cada 1us = 1000ms (en el Gestor los tiempos de alarma se guardan en ms)
+				disparaEventos(1000); // El temporizador interrumpe cada 1ms. Creo que en vez de 1000 hay que poner 1
 				
 			}
 			else{}
