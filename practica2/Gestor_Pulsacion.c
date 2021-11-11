@@ -30,7 +30,7 @@ static void button_clear_nueva_pulsacion_2(){
 static bool boton1_estado(){
 	EXTINT = EXTINT | 2;
 	//si esta pulsado
-	if ((VICRawIntr & posicion_eint1) != posicion_eint1) {
+	if ((VICRawIntr & posicion_eint1) == posicion_eint1) {
 		VICIntEnClear = posicion_eint1;
 		nueva_pulsacion_eint1 = 1;
 	return true;}
