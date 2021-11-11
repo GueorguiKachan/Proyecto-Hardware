@@ -1,4 +1,3 @@
-
 #include <stdint.h>
 #include <stdbool.h>
 #define SIZE 32
@@ -16,7 +15,6 @@ bool eliminar();
 //void mostrar();
 bool hay_eventos();
 struct elemento elementoMasAntiguo();
-int leerIDMasAntiguo();
+uint8_t leerIDMasAntiguo();
 uint32_t leerDatosMasAntiguo();
 uint32_t leerTiempoMasAntiguo();
-
