@@ -2,8 +2,8 @@
 
 #include <stdio.h>
 #include "cola.h"
-
-struct elemento items[SIZE];
+#include "timers.h"
+static struct elemento items[SIZE];
 int front = -1, rear = -1;
 
 // Check if the queue is full
@@ -31,7 +31,7 @@ bool cola_guardar_eventos(uint8_t ID_evento, uint32_t auxData) {
     rear = (rear + 1) % SIZE;
 		aux.ID_evento = ID_evento;
 		aux.auxData = auxData;
-		aux.tiempo = 3; //poner marca de tiempo
+		aux.tiempo =temporizador_leer(); //poner marca de tiempo
     items[rear] = aux;
     //printf("\n Inserted -> %d", element);
 		return true;
@@ -42,7 +42,7 @@ bool cola_guardar_eventos(uint8_t ID_evento, uint32_t auxData) {
 bool eliminar() {
   
   if (vacio()) {
-    //printf("\n Queue is empty !! \n");
+//printf("\n Queue is empty !! \n");
     return false;
   } else {
     if (front == rear) {
@@ -75,18 +75,17 @@ bool eliminar() {
   }
 }*/
 
-//funcion que compruebe si la cola tiene nuevos eventos(supongo que se refiere a que no est· vacia)
+//funcion que compruebe si la cola tiene nuevos eventos(supongo que se refiere a que no est√° vacia)
 bool hay_eventos(){
 	return !vacio();
 }
 
 //funcion que lee el evento mas antiguo sin procesar ( supongo que todos los van en orden de tiempo, no van desordenados)
 struct elemento elementoMasAntiguo(){  
-  //front = (front+1) % SIZE;  
-	return items[front];
+    return items[front];
 }
 
-int leerIDMasAntiguo(){
+uint8_t leerIDMasAntiguo(){
   return items[front].ID_evento;
 }
 uint32_t leerDatosMasAntiguo(){
