@@ -21,7 +21,7 @@
 							}
 							candidatos = candidatos >> 1;
 						}
-						if(filaAct <= filaColumnaSudoku && colAct <= filaColumnaSudoku && 0 < valorNuevo && valorNuevo <= filaColumnaSudoku && esPista ==1 && esCandidato){
+						if(filaAct <= filaColumnaSudoku && colAct <= filaColumnaSudoku && 0 < valorNuevo && valorNuevo <= filaColumnaSudoku && esPista ==0 && esCandidato){
 							cuadricula_C_C[filaAct-1][colAct-1] =  (cuadricula_C_C[filaAct-1][colAct-1] & 0xfff0) + valorNuevo;
 							temporizador_iniciar();
 							temporizador_empezar();
