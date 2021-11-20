@@ -76,3 +76,48 @@ else if(aux.ID_evento == pulsacion1){
 					}else{ powerDownActive = false; escribirIdle(0);}
 					cola_guardar_eventos(alarmaSet,eventoPD);
 				}
+//borrarcandidatos
+	else if(aux.ID_evento == pulsacion2){
+				if (eint2_comprobar()){ //si se ha dejado de pulsar
+					if (!powerDownActive){ // Se quiere borrar, comprobar que no sea una pista
+						
+						int filaAct =  leerFila() ;
+						int colAct = leerColumna();
+						int valorNuevo = leerValorNuevo();
+						int esPista = (cuadricula_C_C[filaAct-1][colAct-1] >> 4) & 0x1;
+						bool esCandidato = false;
+						int candidatos = cuadricula_C_C[filaAct-1][colAct-1] >> 7;
+						
+						if(filaAct==0 && colAct==0 && valorNuevo==0){
+							//Hacer lo que haya que hacer en el caso de que se acabe el juego
+							finPartida=true;
+							break;
+						}
+						
+						/*if (valorNuevo <= 9 && valorNuevo >= 1){
+							candidatos = candidatos >> (valorNuevo -1);
+							esCandidato = 1 == (candidatos &0x1);
+						}*/
+						
+						if(filaAct <= filaColumnaSudoku && colAct <= filaColumnaSudoku && esPista == 0){
+							cuadricula_C_C[filaAct-1][colAct-1] =  (cuadricula_C_C[filaAct-1][colAct-1] & 0xfff0);//+ valorNuevo;
+							temporizador_iniciar();
+							temporizador_empezar();
+							candidatos_actualizar_c(cuadricula_C_C);
+							tiempo = temporizador_parar();
+							valorCambiado=true;
+							escribirError(1);
+							idleCambiado = true;
+							cola_guardar_eventos(alarmaSet,apagarVal);
+						}
+						else{
+							//Error, tratarlo
+						}
+						
+					}else {
+						powerDownActive = false; 
+						escribirIdle(0);
+					}
+				cola_guardar_eventos(alarmaSet,eventoPD);
+			}
+	
