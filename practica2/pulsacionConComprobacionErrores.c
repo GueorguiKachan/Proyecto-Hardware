@@ -85,8 +85,8 @@ else if(aux.ID_evento == pulsacion1){
 						int colAct = leerColumna();
 						int valorNuevo = leerValorNuevo();
 						int esPista = (cuadricula_C_C[filaAct-1][colAct-1] >> 4) & 0x1;
-						bool esCandidato = false;
-						int candidatos = cuadricula_C_C[filaAct-1][colAct-1] >> 7;
+						//bool esCandidato = false;
+						//int candidatos = cuadricula_C_C[filaAct-1][colAct-1] >> 7;
 						
 						if(filaAct==0 && colAct==0 && valorNuevo==0){
 							//Hacer lo que haya que hacer en el caso de que se acabe el juego
