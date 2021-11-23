@@ -20,15 +20,23 @@ int GPIO_leer(int bit_inicial,int num_bits){
 	return IOPIN_desplazado_bit_inicial & mascara_num_bits;
 }
 int GPIO_escribir(int bit_inicial,int num_bits,int valor){
+	int izq = bit_inicial+num_bits;
+	uint32_t max = 0xffffffff;
+	uint32_t min;
+	
 	uint32_t aux = 0;
 	int i;
 	//Preparo el valor que entra en num_bits bits (el valor 3 no entra en 1 bit, por lo que en aux preparo el valor 1)
 	for (i = 0; i < num_bits; i++){
-		aux = aux + pow(2*(valor%2),i);
+		if (i != 0 || valor%2 != 0){
+		aux = aux + pow(2*(valor%2),i);}
 		valor = valor / 2;
 	}
 	//Pongo en IOPIN la mascara aux desplazada hasta el bit_inicial
-	IOPIN = aux << bit_inicial;
+	min = pow(2,bit_inicial)-1;
+	max = max - (pow(2,bit_inicial+num_bits) -1)+ min; 
+	max = max & IOPIN;
+	IOPIN = max | (aux  << bit_inicial);
 	//Devuelvo el valor de aux
 	return aux;
 	

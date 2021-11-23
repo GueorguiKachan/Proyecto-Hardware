@@ -18,5 +18,5 @@ void eint1_ISR (void) __irq ;
 
 void Gestor_Pulsacion_Init();
 
-void eint2_comprobar();
-void eint1_comprobar();
+bool eint2_comprobar();
+bool eint1_comprobar();

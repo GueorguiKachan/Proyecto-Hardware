@@ -33,7 +33,7 @@ void disparaEventos(int tiempoTranscurrido){
         tipoEvento = (misEventos.eventosProgramados[i] >> 24);
         cola_guardar_eventos(tipoEvento, 0); 
       }
-      else{ // Si no se ha cumplido el tiempo, restar
+      else{ // Si no se ha cumplido el tiempo, restar. Ver si es de
         misEventos.tiempoEventos[i] -= tiempoTranscurrido;
       
 			}
@@ -45,14 +45,14 @@ void nuevoEvento(int nuevoEvento){
   
   uint32_t tiempoNuevoEvento = nuevoEvento & 0x007FFFF;
   int tipoEvento = (nuevoEvento >> 24);
-  int eventoExiste = 0;
+  int eventoExiste = -1;
 	int i;
   for(i=0; i<8; i++){ // Comprueba si el tipo de evento a programar ya existe
-    if(tipoEvento == (misEventos.eventosProgramados[i] >> 24)){
+    if(tipoEvento == (misEventos.eventosProgramados[i] >> 24) && misEventos.estaLibre[i] == 0){
       eventoExiste = i;
     }
   }
-  if(eventoExiste != 0){ // Si en alguna posición del array existe un evento de este tipo
+  if(eventoExiste > -1){ // Si en alguna posición del array existe un evento de este tipo
     if(tiempoNuevoEvento == 0){ // Cancelar el evento 
       misEventos.estaLibre[eventoExiste] = 1; // Cancelar la alarma
     }

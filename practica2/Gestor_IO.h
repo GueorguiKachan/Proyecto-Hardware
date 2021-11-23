@@ -1,0 +1,17 @@
+void GestorIO_iniciar();
+int leerFila();
+void escribirFila(int X);
+int leerColumna();
+void escribirColumna(int X);
+int leerValorCelda();
+void escribirValorCelda(int X);
+int leerValorNuevo();
+void escribirValorNuevo(int X);
+int leerCandidatos();
+void escribirCandidatos(int X);
+int leerError();
+void escribirError(int X);
+int leerOverflow();
+void escribirOverflow(int X);
+int leerIdle();
+void escribirIdle(int X);

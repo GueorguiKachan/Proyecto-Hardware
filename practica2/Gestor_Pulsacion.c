@@ -5,8 +5,6 @@
 #include <LPC210X.H>   
 static volatile int nueva_pulsacion_eint1 =0;
 static volatile int nueva_pulsacion_eint2 =0;
-static volatile unsigned int eint1_count = 0;
-static volatile unsigned int eint2_count = 0;
 const int posicion_eint1 = 0x00008000;
 const int posicion_eint2 = 0x00010000;
 
@@ -57,7 +55,7 @@ static bool boton2_estado(){
 	}
 }
 
-void eint1_comprobar(){
+bool eint1_comprobar(){
 	uint8_t evento;
 	uint32_t aux;
 	//si el boton sigue pulsado
@@ -67,10 +65,12 @@ void eint1_comprobar(){
 		aux = aux << 24;
 		aux = aux | 100;
 		cola_guardar_eventos(evento, aux);
+		return false;
 	}
+	return true;
 }
 
-void eint2_comprobar(){
+bool eint2_comprobar(){
 	uint8_t evento;
 	uint32_t aux;
 	//si el boton sigue pulsado
@@ -80,15 +80,18 @@ void eint2_comprobar(){
 		aux = aux << 24;
 		aux = aux | 100;
 		cola_guardar_eventos(evento, aux);	
+		return false;
 	}
+	return true;
 }
 
 void eint1_ISR (void) __irq {
 	uint8_t evento;
 	uint32_t aux;
 	
-	eint1_count++;
-	boton1_estado();	
+	EXTINT = EXTINT | 2;
+	VICIntEnClear = posicion_eint1;
+	nueva_pulsacion_eint1 = 1;
 	
 	evento = alarmaSet;
 	aux = pulsacion1;
@@ -103,8 +106,9 @@ void eint2_ISR (void) __irq {
 	uint8_t evento;
 	uint32_t aux;
 	
-	eint1_count++;
-	boton2_estado();
+	EXTINT = EXTINT | 3;
+	VICIntEnClear = posicion_eint2;
+	nueva_pulsacion_eint2 = 1;
 	
 	evento = alarmaSet;
 	aux = pulsacion2;
@@ -119,8 +123,6 @@ void eint2_ISR (void) __irq {
 void Gestor_Pulsacion_Init(){
 	button_clear_nueva_pulsacion_1();
 	button_clear_nueva_pulsacion_2();
-	eint1_count = 0;
-	eint2_count = 0;
 	
 	PINSEL0 = PINSEL0 | 0xa0000000; //a activa eint1 y eint2
 	//PINSEL1 = 0x00000000;
