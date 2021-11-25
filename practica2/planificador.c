@@ -18,7 +18,6 @@ while(1){
 	bool idleCambiado = false;
 	bool idleRecienApagado = false;
 	bool valorCambiado = false;
-	bool overflow = false;
 	int filaAntes = 20;
 	int colAntes = 20;
 	int eventoPD;
@@ -28,7 +27,7 @@ while(1){
 	int tiempoAntes;
 	
 	int tiempo;
-	bool finPartida = false;
+	//bool finPartida = false;
 	struct elemento aux;
 	int i, j;
 	
@@ -62,8 +61,8 @@ while(1){
 	cola_guardar_eventos(alarmaSet,eventoVisualizar);
 	candidatos_actualizar_c(cuadricula_C_C);
 	
-	while(!finPartida){
-		
+	while(1){
+		if(colaOverflow()){break;}
     if(hay_eventos()){ // Comprueba si en la cola hay eventos nuevos. Si los hay averigua cual es
 			aux = elementoMasAntiguo();
 			eliminar();
@@ -83,7 +82,7 @@ while(1){
 						int candidatos;
 						
 						if(filaAct==0 && colAct==0 && valorNuevo==0){// Se reconoce el final de la partida
-							finPartida = true;
+							//finPartida = true;
 							break;
 						}
 						if (colAct >0 && colAct <= 9 && filaAct > 0 && filaAct <= 9){ //Comprobar que el valor a introducir es válido
@@ -105,12 +104,11 @@ while(1){
 							valorCambiado=true;
 							escribirError(1);
 							idleCambiado = true;
-							overflow = cola_guardar_eventos(alarmaSet,apagarVal); // Tras 1 segundo, apagar bit de validación
-							if(overflow){break;}
+							cola_guardar_eventos(alarmaSet,apagarVal); // Tras 1 segundo, apagar bit de validación
 						}
 					}else{ powerDownActive = false; escribirIdle(0);} // Aquí habría que encender el botón de error mejor no?
-					overflow = cola_guardar_eventos(alarmaSet,eventoPD);
-					if(overflow){break;}
+					cola_guardar_eventos(alarmaSet,eventoPD);
+					
 				}
 			}
 			else if(aux.ID_evento == pulsacion2){										// Se pulsa el botón eint2
@@ -135,15 +133,15 @@ while(1){
 							valorCambiado=true;
 							escribirError(1);
 							idleCambiado = true;
-							overflow = cola_guardar_eventos(alarmaSet,apagarVal);// Tras 1 segundo, apagar bit de validación
-							if(overflow){break;}
+							cola_guardar_eventos(alarmaSet,apagarVal);// Tras 1 segundo, apagar bit de validación
+							
 						}			
 					}else {
 						powerDownActive = false; 
 						escribirIdle(0);
 					}
-				overflow = cola_guardar_eventos(alarmaSet,eventoPD);
-				if(overflow){break;}}
+				cola_guardar_eventos(alarmaSet,eventoPD);
+					}
 			}
 			else if(aux.ID_evento == tempPeriodico){                 // Temporizador periódico. Comprobar si alguna alarma salta
 				disparaEventos(1); // El temporizador interrumpe cada 1ms. Creo que en vez de 1000 hay que poner 1
@@ -160,8 +158,7 @@ while(1){
 					int32_t celda;
 					filaAntes = fila;
 					colAntes = col;
-					overflow = cola_guardar_eventos(alarmaSet,eventoPD);
-					if(overflow){break;}
+					cola_guardar_eventos(alarmaSet,eventoPD);
 					
 					if (fila >0 && fila <=9 && col >0 && col <= 9){ //Escribir solo si el valor de fila/columna es válido
 						celda = cuadricula_C_C[fila-1][col-1];
@@ -189,9 +186,10 @@ while(1){
 				escribirIdle(0);
 			}
     }
-		if(overflow){break;} // Se sale del programa y se queda en un bucle
+		if(colaOverflow()){break;} // Se sale del programa y se queda en un bucle
 		temporizador_parar();
 		PM_power_down(); // Modo Powe Down cuando acaba una partida, hasta que se pulse un botón
 		powerDownActive = true;
 	}
 }
+
