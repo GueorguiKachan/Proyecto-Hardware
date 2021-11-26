@@ -7,6 +7,7 @@
 static uint8_t fila_actual = 10 ,columna_actual = 10; // Guardan el ultimo valor de fila y columna que se ha visualizado
 volatile int validacion_valor_nuevo = 0;
 bool nuevo_valor_introducido = false;
+static uint32_t eventoPD;
 
 void gestorIO_iniciar(){
 	uint32_t eventoVisualizar;
@@ -18,6 +19,11 @@ void gestorIO_iniciar(){
 	eventoVisualizar = eventoVisualizar <<24;
 	eventoVisualizar = eventoVisualizar | 0x00800000;
 	eventoVisualizar = eventoVisualizar + 200;
+	
+	eventoPD = PDown; // Todo lo necesario para la alarma de un evento visualizar
+	eventoPD = eventoPD <<24;
+	eventoPD = eventoPD | 0x00800000;
+	eventoPD = eventoPD + 15000;
 	
 	cola_guardar_eventos(alarmaSet,eventoVisualizar);
 }
@@ -33,6 +39,7 @@ bool gestorIO_visualizar(){
 	if (fila_actual != fila || columna_actual != col || nuevo_valor_introducido){
 		gestorIO_guardar_fila_columna_actual(fila,col);
 		nuevo_valor_introducido = false;
+		cola_guardar_eventos(alarmaSet,eventoPD);
 		return true;
 	}
 	nuevo_valor_introducido = false; // Esto igual no hace falta ponerlo
@@ -99,10 +106,11 @@ void gestorIO_activar_validacion(){
 	validacion_valor_nuevo = 1;
 	cola_guardar_eventos(alarmaSet,apagarVal);
 	nuevo_valor_introducido = true;
+	cola_guardar_eventos(alarmaSet,eventoPD);
 }
 
 void gestorIO_apagar_validacion(){
 	gestorIO_escribir_error(0);
 	validacion_valor_nuevo = 0;
-	
+	cola_guardar_eventos(alarmaSet,eventoPD);
 }

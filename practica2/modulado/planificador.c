@@ -8,13 +8,12 @@
 #include "Gestor_Pulsacion.h"
 #include "Gestor_IO.h"
 #include "sudoku_2021.h"
-#include "tableros.h"
 
 int main (void) {
 bool power_down_active = false;
 while(1){
-	bool idleRecienApagado = false;
-	int eventoPD;
+	bool idle_recien_apagado = false;
+	//int eventoPD;
 	int tiempoAntes;
 	int tiempo; // Guardar el valor de antes en esta variable y luego hacer tiempo = leer_tiempo - tiempo
 	uint8_t evento_id;
@@ -36,46 +35,46 @@ while(1){
 			if(evento_id == alarmaSet){														// Programar alarma nueva
 				gestor_alarma_nueva_alarma(cola_leer_datos_aux_mas_antiguo());
 			}
-			else if(evento_id == pulsacion1){											// Se pulsa el bot贸n eint1
+			else if(evento_id == pulsacion1){											// Se pulsa el bot髇 eint1
 				if(pulsacion1_recien_pulsado){
 					if(!power_down_active){
 						tiempoAntes = temporizador_leer();
 						//falta comprobar si todo es 0
 						sudoku_anyadir_valor_nuevo(gestorIO_leer_fila(),gestorIO_leer_columna(),gestorIO_leer_valor_nuevo());
 						tiempo = temporizador_leer() - tiempoAntes;
-						gestorIO_activar_validacion(); // Tras 1 segundo, apagar bit de validaci贸n
+						gestorIO_activar_validacion(); // Tras 1 segundo, apagar bit de validaci髇
 					}
 					else{ 
 						power_down_active = false;
 						gestorIO_escribir_idle(0);// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Esto no sobra?
 					}
-					cola_guardar_eventos(alarmaSet,eventoPD);
+					//cola_guardar_eventos(alarmaSet,eventoPD); !!!!!!!!!!!!!!!!!A馻dir un cola_guardar_eventos en el gestor energia
 					pulsacion1_recien_pulsado = false;
 				}
 				if (!gestor_pulsacion_eint1_comprobar_sigue_pulsado()){
 					pulsacion1_recien_pulsado = true;
 				}
-		}
-		else if(evento_id == pulsacion2){										// Se pulsa el bot贸n eint2
-				if (pulsacion2_recien_pulsado){ //Si se ha dejado de pulsar
-					if(!power_down_active){ //Comprobar si se ha pulsado el bot贸n para salir de modo Power Down
-						tiempoAntes = temporizador_leer();
-						sudoku_borrar_valor(gestorIO_leer_fila(),gestorIO_leer_columna());
-						tiempo = temporizador_leer() - tiempoAntes;
-						gestorIO_activar_validacion();
-					}
-					else{ 
-						power_down_active = false;
-						gestorIO_escribir_idle(0);// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Esto no sobra?
-					}
-				cola_guardar_eventos(alarmaSet,eventoPD);
-				pulsacion2_recien_pulsado = false;
 			}
-			if (!gestor_pulsacion_eint2_comprobar_sigue_pulsado()){
-					pulsacion2_recien_pulsado = true;
+			else if(evento_id == pulsacion2){										// Se pulsa el bot髇 eint2
+					if (pulsacion2_recien_pulsado){ //Si se ha dejado de pulsar
+						if(!power_down_active){ //Comprobar si se ha pulsado el bot髇 para salir de modo Power Down
+							tiempoAntes = temporizador_leer();
+							sudoku_borrar_valor(gestorIO_leer_fila(),gestorIO_leer_columna());
+							tiempo = temporizador_leer() - tiempoAntes;
+							gestorIO_activar_validacion();
+						}
+						else{ 
+							power_down_active = false;
+							gestorIO_escribir_idle(0);// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Esto no sobra?
+						}
+					//cola_guardar_eventos(alarmaSet,eventoPD); !!!!!!!!!!!!!!!!!A馻dir un cola_guardar_eventos en el gestor energia
+					pulsacion2_recien_pulsado = false;
+				}
+				if (!gestor_pulsacion_eint2_comprobar_sigue_pulsado()){
+						pulsacion2_recien_pulsado = true;
+				}
 			}
-		}
-			else if(evento_id == tempPeriodico){                 // Temporizador peri贸dico. Comprobar si alguna alarma salta
+			else if(evento_id == tempPeriodico){                 // Temporizador peri骴ico. Comprobar si alguna alarma salta
 				gestor_alarma_restar_tiempo_alarmas_programadas(); // El temporizador interrumpe cada 1ms. Creo que en vez de 1000 hay que poner 1
 			}
 			else if(evento_id == PDown){													// Poner el sistema en modo PowerDown
@@ -84,8 +83,8 @@ while(1){
 				PM_power_down();
 			}
 			else if(evento_id == visualizar){											// Actualizar el valor de la celda y sus candidatos en la GPIO
-					if (gestorIO_visualizar() || idleRecienApagado){
-					cola_guardar_eventos(alarmaSet,eventoPD);
+					if (gestorIO_visualizar() || idle_recien_apagado){
+					//cola_guardar_eventos(alarmaSet,eventoPD); 
 						if(sudoku_fila_columna_validos(gestorIO_leer_fila(),gestorIO_leer_columna())){
 							//************** Unir estas 3 en una? Pasarle el valor de la celda y ya que internamente llame a estas 3*******************
 							gestorIO_escribir_valor_celda(sudoku_get_valor_celda(gestorIO_leer_fila(), gestorIO_leer_columna())); 
@@ -93,11 +92,10 @@ while(1){
 							gestorIO_escribir_candidatos(sudoku_get_valor_candidatos(gestorIO_leer_fila(), gestorIO_leer_columna()));
 						}		
 					}
-					idleRecienApagado = false;
+					idle_recien_apagado = false;
 			}
 			else if(evento_id == apagarValidacion){								// Tras un segundo apagar el bit de validacion
-				idleRecienApagado = true;
-				gestorIO_escribir_error(0);
+				idle_recien_apagado = true;
 				gestorIO_apagar_validacion();
 			}
 			else{} // El valor del evento no coincide con ninguno de los registrados
@@ -105,12 +103,12 @@ while(1){
 		}
       else{
 				gestorIO_escribir_idle(1);
-        PM_idle(); // Poner el procesador en modo reposo hasta que llegue la interrupci贸n del temporizador
+        PM_idle(); // Poner el procesador en modo reposo hasta que llegue la interrupci髇 del temporizador
 				gestorIO_escribir_idle(0);
 			}
     }
 		temporizador_parar();
-		PM_power_down(); // Modo Power Down cuando acaba una partida, hasta que se pulse un bot贸n
+		PM_power_down(); // Modo Power Down cuando acaba una partida, hasta que se pulse un bot髇
 		power_down_active = true;
 	}
 }
