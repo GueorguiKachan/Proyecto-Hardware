@@ -27,8 +27,17 @@ SWI_Handler
                 BICEQ   R12, R12, #0xFF000000  ; Extract SWI Number
 
 ; add code to enable/disable the global IRQ flag
-                CMP     R12,#0xFF              
-               ; BEQ     __decrease_var
+                CMP     R12,#0xFC              
+                BEQ     __disable_isr_fiq
+				
+				CMP     R12,#0xFD              
+                BEQ     __enable_isr_fiq
+				
+				CMP     R12,#0xFE              
+                BEQ     __disable_isr
+				
+				CMP     R12,#0xFF              
+                BEQ     __enable_isr
 
                 LDR     R8, SWI_Count
                 CMP     R12, R8
@@ -60,17 +69,37 @@ SWI_Table
 ;               ...
 SWI_End
 
-               ; EXTERN shared_var [DATA,SIZE=4]
 
-;__decrease_var
- ;               LDR R8, =shared_var
-	;	LDR R12, [r8]
-     ;           SUB R12, R12, #1
-      ;          STR R12, [R8]
-       ;         LDMFD   SP!, {R8, R12}         ; Load R8, SPSR
-        ;        MSR     SPSR_cxsf, R12         ; Set SPSR
-         ;       LDMFD   SP!, {R12, PC}^        ; Restore R12 and Return
+__enable_isr
+ 
+				LDMFD   SP!, {R8, R12}         ; Load R8, SPSR
+				BIC     R12, R12, #0x80   	   ; Volver a poner el bit de irq a 0 para activar las interrupciones de este tipo
+                MSR     SPSR_cxsf, R12         ; Set SPSR
+                LDMFD   SP!, {R12, PC}^        ; Restore R12 and Return
+				B FIN
+				
+__disable_isr
 
+				LDMFD   SP!, {R8, R12}         ; Load R8, SPSR
+				ORR     R12, R12, #0x80		   ; Poner el bit de irq a 1 para desactivar las interrupciones de este tipo
+                MSR     SPSR_cxsf, R12         ; Set SPSR
+                LDMFD   SP!, {R12, PC}^        ; Restore R12 and Return
+                B FIN
+				
+__enable_isr_fiq
 
-                END
+				LDMFD   SP!, {R8, R12}         ; Load R8, SPSR
+				BIC     R12, R12, #0x40   	   ; Volver a poner el bit de irq a 0 para activar las interrupciones de este tipo
+                MSR     SPSR_cxsf, R12         ; Set SPSR
+                LDMFD   SP!, {R12, PC}^        ; Restore R12 and Return
+				B FIN
+				
+__disable_isr_fiq				
+				
+				LDMFD   SP!, {R8, R12}         ; Load R8, SPSR
+				ORR     R12, R12, #0x40		   ; Poner el bit de irq a 1 para desactivar las interrupciones de este tipo
+                MSR     SPSR_cxsf, R12         ; Set SPSR
+                LDMFD   SP!, {R12, PC}^        ; Restore R12 and Return
+FIN				
+				END
 
