@@ -12,6 +12,7 @@ uint32_t __SWI_0 (void) {
    return (((T1TC*T1PR)+T1PC)*16)/1024;
 }
 
+
 void timer0_ISR (void) __irq;    // Generate Interrupt
 void timer1_ISR (void) __irq;    // Generate Interrupt
 
@@ -61,6 +62,7 @@ void temporizador_periodico (int periodo) {
 		// 4 is the number of the interrupt assigned. Number 4 is the Timer 0 (see table 40 of the LPC2105 user manual  
 		VICVectCntl1 = 0x20 | 4;                   
     VICIntEnable = VICIntEnable | 0x00000010;                  // Enable Timer0 Interrupt
+		VICIntSelect = VICIntSelect | 0x00000010; 
 }
 
 
