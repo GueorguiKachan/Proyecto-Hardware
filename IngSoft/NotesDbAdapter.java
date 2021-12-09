@@ -139,4 +139,10 @@ public class NotesDbAdapter {
 
         return mDb.update(DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
     }
+
+
+    public boolean deleteNote2() {
+
+        return mDb.delete(DATABASE_TABLE, null , null) > 0;
+    }
 }
