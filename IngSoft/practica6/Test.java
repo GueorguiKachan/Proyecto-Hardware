@@ -32,12 +32,11 @@ public class Test {
     public void pruebaSobreCarga(){
         String texto = "texto";
         int tamanyo = 5;
-       // Log.v("PruebaSobrecarga", "tamanyo="+ tamanyo);
-        /*while (true){
+        while (true){
             Log.v("PruebaSobrecarga", "tamanyo="+ tamanyo);
             notes.createNote("sobrecarga - "+ tamanyo, texto);
             tamanyo += 5;
             texto += texto;
-        }*/
+        }
     }
 }
