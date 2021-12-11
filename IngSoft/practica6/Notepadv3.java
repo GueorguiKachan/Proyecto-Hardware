@@ -27,7 +27,7 @@ public class Notepadv3 extends AppCompatActivity {
     private static final int SEND_ID = Menu.FIRST + 3;
     private static final int TEST_ID = Menu.FIRST + 4;
     private static final int UNDO_TEST_ID = Menu.FIRST + 5;
-    private static final int SC_TEST_ID = Menu.FIRST + 6;
+    private static final int SOBRECARGA_TEST_ID = Menu.FIRST + 6;
 
     private NotesDbAdapter mDbHelper;
     private ListView mList;
@@ -76,7 +76,7 @@ public class Notepadv3 extends AppCompatActivity {
         menu.add(Menu.NONE, INSERT_ID, Menu.NONE, R.string.menu_insert);
         menu.add(Menu.NONE, TEST_ID, Menu.NONE, "Test Volumen");
         menu.add(Menu.NONE, UNDO_TEST_ID, Menu.NONE, "Deshacer Test Volumen");
-        menu.add(Menu.NONE, SC_TEST_ID, Menu.NONE, "Test Sobrecarga");
+        menu.add(Menu.NONE, SOBRECARGA_TEST_ID, Menu.NONE, "Test Sobrecarga");
         return result;
     }
 
@@ -93,7 +93,7 @@ public class Notepadv3 extends AppCompatActivity {
             case UNDO_TEST_ID:
                 runUndo();
                 return true;
-            case SC_TEST_ID:
+            case SOBRECARGA_TEST_ID:
                 runSobrecarga();
                 return true;
         }
