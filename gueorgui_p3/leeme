@@ -1,0 +1,15 @@
+Modificaciones:
+
+-GestorVisualizacion.c
+    -enviar_string(): Añadido el strcpy
+    -print_mensaje_inicial(): Cambiado un poco el mensaje
+    -uart0_ISR: Se ha sacado el VICVectAddr = 0 fuera del else
+    
+ -Sudoku.c
+    -introducir_posible_valor(): Se ha añadido un * debajo del nuevo posible valor
+    
+ -cola.c
+    -cola_guardar_eventos(): Se mira de que tipo es la interrupción y en función de eso se desactivan unas cosas u otras
+    
+ -buttons.c
+    -eint1_ISR/eint2_ISR: El cola_guardar_eventos se hace antes del VICIntEnClear para que al comprobar en cola_guardar_eventos se pueda ver que se está invocando desde una IRQ.
