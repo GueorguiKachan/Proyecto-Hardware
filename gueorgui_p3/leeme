@@ -13,3 +13,9 @@ Modificaciones:
     
  -buttons.c
     -eint1_ISR/eint2_ISR: El cola_guardar_eventos se hace antes del VICIntEnClear para que al comprobar en cola_guardar_eventos se pueda ver que se está invocando desde una IRQ.
+    
+ -timers.h
+    -Se han añadido enable_fiq y disable_fiq.
+    
+ -SWI.s
+    -Se ha añadido el código en ensamblador de enable_fiq y disable_fiq.
