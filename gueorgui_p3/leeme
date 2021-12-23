@@ -3,6 +3,7 @@ Modificaciones:
 -GestorVisualizacion.c
     -enviar_string(): Añadido el strcpy
     -print_mensaje_inicial(): Cambiado un poco el mensaje
+    -print_mensaje_final(): Se ha pasado de char[2] a char[10] para los minutos y segundos.
     -uart0_ISR: Se ha sacado el VICVectAddr = 0 fuera del else
     
  -Sudoku.c
