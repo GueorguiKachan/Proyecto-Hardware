@@ -126,9 +126,9 @@ void deshacer(string ultimaVersion, string ficheroBk, string versionRestaurada){
 }*/
 
 void mostrarT (){
-    for (int i = 0; i < 3; i++){
-        for (int j = 0; j <3; j++){
-            cout << T[j][i]<<endl;
+    for (int i = 0; i <= 3; i++){
+        for (int j = 0; j <=3; j++){
+            cout << T[i][j]<<endl;
         }
     }
 }
@@ -137,11 +137,11 @@ static void res( int i, int j){
     cout << i <<":"<<j<<endl;
     int k;
 
-    if (i == 1){
+    if (i == 0){
         for (k = 0; k < j; k++){
             cout << "Anadir" << B[k]<< "en el lugar" << k<<endl;
         }
-    }else if (j == 1){
+    }else if (j == 0){
         for (k = 0; k < i; k++){
             cout << "Borrar car numero " << k << endl;
         }
@@ -190,28 +190,28 @@ void hallarCambios(string ficheroEntrada, string ficheroSalida){
 	const int tamanyoEntrada = sEntrada.size();
 	//Transf T[tamanyoEntrada][tamanyoSalida];
     
-    inicializarT(tamanyoEntrada -1,tamanyoSalida-1);
+    inicializarT(tamanyoEntrada ,tamanyoSalida);
     cout << "Se ha inicializado " <<endl;
-	int C[tamanyoEntrada][tamanyoSalida];
+	int C[tamanyoEntrada + 1][tamanyoSalida + 1];
 
-	for (int i = 0; i < tamanyoSalida; i++){
+	for (int i = 0; i <= tamanyoSalida; i++){
 		C[i][0] = i;
         cout << " i: " <<i <<endl;
 	}
-	for (int j = 0; j < tamanyoEntrada; j++){
+	for (int j = 0; j <= tamanyoEntrada; j++){
 		C[0][j] = j;
         cout << " j: " <<j <<endl;	
 	}
 
 	int x,y,z;
 
-	for(int i=1; i < tamanyoSalida; i++){
+	for(int i=1; i <= tamanyoSalida; i++){
 		//cout << "Letra i " << sSalida[i] << endl;
-		for(int j=1; j < tamanyoEntrada; j++){
+		for(int j=1; j <= tamanyoEntrada; j++){
 			//cout << "Letra j " << sEntrada[j] << endl;
 			x = C[i-1][j] + 1;
 			y = C[i][j-1] + 1;
-			if(sEntrada[j-1] == sSalida[i-1]){
+			if(sEntrada[i-1] == sSalida[j-1]){
 				z = C[i-1][j-1];
 			}else{
 				z = C[i-1][j-1] + 1;
@@ -249,8 +249,8 @@ void hallarCambios(string ficheroEntrada, string ficheroSalida){
 	}
     cout << "antes de res() "<<endl;
     mostrarT();
-    res(tamanyoEntrada -1, tamanyoSalida-1);
-    borrarT(tamanyoEntrada-1 );
+    res(tamanyoEntrada , tamanyoSalida);
+    borrarT(tamanyoEntrada);
 }
 
 
